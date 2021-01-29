@@ -11,20 +11,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-    <script type="module" src="nameList.js"></script>
+    <script src="guess.js"></script>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" id="main">
         <h1>Welcome to the JavaScript guessing game!</h1>
 
         <div id="stats">
-            <p>Wins: 0</p>
-            <p>Losses: 0</p>
+            <p id="wins">Wins: 0</p>
+            <p id="losses">Losses: 0</p>
         </div>
 
-        <div id="wordToGuess" class="center-align">
-            <p>________</p>
+        <div id="word" class="center-align">
+            <p id="wordToGuess">w</p>
         </div>
 
         <div id="lettersUsed" class="right-align">
