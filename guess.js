@@ -1,32 +1,3 @@
-function userWon() {
-  return (
-    document.getElementById("word").textContent.toLowerCase() === WORD &&
-    usedLetters.length < maxGuesses
-  );
-}
-
-function userLost() {
-  return document.getElementById("lettersUsed").length > 8;
-}
-
-function getRandomWord() {
-  let randomWord = nameList[Math.floor(Math.random() * nameList.length)];
-  console.log("The random word is:" + randomWord);
-  return randomWord;
-}
-
-function newGame() {
-  usedLetters = [];
-  WORD = getRandomWord();
-}
-
-function isLetter(str) {
-  return str.length === 1 && str.match(/^[-+_., A-Za-z0-9]+$/);
-}
-
-var guesses = 0;
-var losses = 0;
-var wins = 0;
 const nameList = [
   "Adonis",
   "After",
@@ -427,12 +398,55 @@ const nameList = [
   "ZangoDB",
   "ZeptoJS",
 ];
-var usedLetters = "";
 
+function userWon() {
+  return (
+    document.getElementById("word").textContent.toLowerCase() === WORD &&
+    usedLetters.length < maxGuesses
+  );
+}
+
+function userLost() {
+  return document.getElementById("lettersUsed").length > 8;
+}
+
+function getRandomWord() {
+  let randomWord = nameList[Math.floor(Math.random() * nameList.length)];
+  console.log("The random word is:" + randomWord);
+
+  return randomWord;
+}
+
+function hideWord(word) {
+  for (i in word) {
+    hiddenWord.push("_ ")
+  }
+}
+
+function newGame() {
+  usedLetters = [];
+  WORD = getRandomWord();
+}
+
+function isLetter(str) {
+  return str.length === 1 && str.match(/^[-+_., A-Za-z0-9]+$/);
+}
+
+var losses = 0;
+var wins = 0;
+var guesses = 0;
+var usedLetters = [];
 var WORD = getRandomWord().toLowerCase();
 var hiddenWord = [];
 var maxGuesses = 8;
 var key;
+
+function init() {
+  guesses = 0;
+  usedLetters = []
+  WORD = getRandomWord().toLowerCase()
+  hiddenWord = {}
+}
 // print a hidden word for the user to guess
 for (letter in WORD) {
   hiddenWord.push("_ ");
@@ -449,7 +463,7 @@ document.addEventListener("keypress", (event) => {
 
   console.log(`Key ${key} pressed`);
   console.log("userWon()" + userWon());
-
+  console.log("userLost()" + userLost());
   if (WORD.includes(key) && isLetter(key)) {
     console.log("Yep, that's one of the letters we want!");
 
@@ -460,28 +474,24 @@ document.addEventListener("keypress", (event) => {
     }
 
     document.getElementById("word").textContent = hiddenWord.join("");
-
   }
   if (!WORD.includes(key) && usedLetters.includes(key)) {
     return;
   }
 
-  if (!WORD.includes(key) && !usedLetters.includes(key)) {
+  if (!WORD.includes(key) && !usedLetters.includes(key)
+    && usedLetters.length <= 8) {
     usedLetters += key;
     document.getElementById("lettersUsed").textContent = usedLetters.split("");
   }
-  
+
   if (userWon()) {
     console.log("You win! :D");
     wins += 1;
     document.getElementById("wins").textContent = "Wins: " + Number(wins);
 
-    document.getElementById("word").textContent = "You win!"
-    let youWin = setInterval(() => {
-      document.getElementById("word").textContent = "You win!"
-    }, 3000);
-    clearInterval(youWin)
-    hiddenWord.join("");
+    document.getElementById("word").textContent = hideWord(getRandomWord);
+    init()
     // clear everything and tell the user they won
     // for three seconds, then start the next game
   }
@@ -494,7 +504,10 @@ document.addEventListener("keypress", (event) => {
     // for a few seconds, then start the next game
     // by replacing the guessed word with the dashes
     // from the next word
-    document.getElementById("main").textContent =
+    document.getElementById("word").textContent =
       "You lost. See if you can guess the next word! :)";
+    init()
+    document.getElementById("word").textContent = hideWord(getRandomWord());
+    
   }
 });
