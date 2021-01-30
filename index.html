@@ -11,12 +11,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-    <script src="guess.js"></script>
+    
 </head>
 
 <body>
     <div class="container" id="main">
-        <h1>Welcome to the JavaScript guessing game!</h1>
+        <h2>Welcome to the JavaScript guessing game!</h2>
 
         <div id="stats">
             <p id="wins">Wins: 0</p>
@@ -27,10 +27,11 @@
             <p id="wordToGuess">w</p>
         </div>
 
-        <div id="lettersUsed" class="right-align">
-            <p1>a b c d e f</p1>
+        <div class="right-align">
+            <p1 id="lettersUsed"></p1>
         </div>
     </div>
+    <script src="guess.js"></script>
 </body>
 
 </html>
