@@ -401,13 +401,17 @@ const nameList = [
 
 function userWon() {
   return (
-    document.getElementById("word").textContent.toLowerCase() === WORD &&
+    document.getElementById("word")
+    .textContent === WORD &&
     usedLetters.length < maxGuesses
   );
 }
 
 function userLost() {
-  return document.getElementById("lettersUsed").length > 8;
+  return (
+    document.getElementById("lettersUsed")
+    .textContent > 12
+  );
 }
 
 function getRandomWord() {
@@ -416,20 +420,25 @@ function getRandomWord() {
 
   return randomWord;
 }
-
 function hideWord(word) {
+  hiddenWord = [];
   for (i in word) {
-    hiddenWord.push("_ ")
+    hiddenWord.push("_ ");
   }
-}
-
-function newGame() {
-  usedLetters = [];
-  WORD = getRandomWord();
+  return hiddenWord
 }
 
 function isLetter(str) {
   return str.length === 1 && str.match(/^[-+_., A-Za-z0-9]+$/);
+}
+
+function init() {
+  guesses = 0;
+  usedLetters = [];
+  WORD = getRandomWord().toLowerCase();
+  hiddenWord = hideWord(WORD);
+
+  document.getElementById("word").textContent = hiddenWord.join("");
 }
 
 var losses = 0;
@@ -438,15 +447,9 @@ var guesses = 0;
 var usedLetters = [];
 var WORD = getRandomWord().toLowerCase();
 var hiddenWord = [];
-var maxGuesses = 8;
+var maxGuesses = 12;
 var key;
 
-function init() {
-  guesses = 0;
-  usedLetters = []
-  WORD = getRandomWord().toLowerCase()
-  hiddenWord = {}
-}
 // print a hidden word for the user to guess
 for (letter in WORD) {
   hiddenWord.push("_ ");
@@ -479,10 +482,13 @@ document.addEventListener("keypress", (event) => {
     return;
   }
 
-  if (!WORD.includes(key) && !usedLetters.includes(key)
-    && usedLetters.length <= 8) {
-    usedLetters += key;
-    document.getElementById("lettersUsed").textContent = usedLetters.split("");
+  if (
+    !WORD.includes(key) &&
+    !usedLetters.includes(key) &&
+    usedLetters.length <= 8
+  ) {
+    usedLetters.push(key);
+    document.getElementById("lettersUsed").textContent = usedLetters;
   }
 
   if (userWon()) {
@@ -490,8 +496,7 @@ document.addEventListener("keypress", (event) => {
     wins += 1;
     document.getElementById("wins").textContent = "Wins: " + Number(wins);
 
-    document.getElementById("word").textContent = hideWord(getRandomWord);
-    init()
+    init();
     // clear everything and tell the user they won
     // for three seconds, then start the next game
   }
@@ -506,8 +511,7 @@ document.addEventListener("keypress", (event) => {
     // from the next word
     document.getElementById("word").textContent =
       "You lost. See if you can guess the next word! :)";
-    init()
-    document.getElementById("word").textContent = hideWord(getRandomWord());
-    
+    init();
+    document.getElementById("word").textContent = hideWord(WORD);
   }
 });
