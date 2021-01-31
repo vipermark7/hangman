@@ -401,17 +401,21 @@ const nameList = [
 
 function userWon() {
   return (
-    document.getElementById("word")
-    .textContent === WORD &&
+    document.getElementById("word").textContent === WORD &&
     usedLetters.length < maxGuesses
   );
 }
 
 function userLost() {
-  return (
-    document.getElementById("lettersUsed")
-    .textContent > 12
-  );
+  let original = document.getElementById("lettersUsed").textContent;
+  let withoutCommas = "";
+  for (i in original) {
+    if (i === ",") {
+      withoutCommas += "";
+    }
+    withoutCommas += i;
+  }
+  return withoutCommas.length > maxGuesses;
 }
 
 function getRandomWord() {
@@ -425,7 +429,7 @@ function hideWord(word) {
   for (i in word) {
     hiddenWord.push("_ ");
   }
-  return hiddenWord
+  return hiddenWord;
 }
 
 function isLetter(str) {
@@ -455,7 +459,7 @@ for (letter in WORD) {
   hiddenWord.push("_ ");
 }
 
-document.getElementById("word").textContent = hiddenWord.join("");
+document.getElementById("word").textContent = hiddenWord.join(" ");
 
 document.addEventListener("keypress", (event) => {
   key = event.key.toLowerCase();
@@ -485,7 +489,7 @@ document.addEventListener("keypress", (event) => {
   if (
     !WORD.includes(key) &&
     !usedLetters.includes(key) &&
-    usedLetters.length <= 8
+    usedLetters.length <= maxGuesses
   ) {
     usedLetters.push(key);
     document.getElementById("lettersUsed").textContent = usedLetters;
@@ -504,14 +508,14 @@ document.addEventListener("keypress", (event) => {
   if (userLost()) {
     console.log("You lost! :(");
     losses += 1;
+    init();
     document.getElementById("losses").textContent.replace(/d/, losses);
     // clear everything and tell the user they lost
     // for a few seconds, then start the next game
     // by replacing the guessed word with the dashes
     // from the next word
     document.getElementById("word").textContent =
-      "You lost. See if you can guess the next word! :)";
+      "You lost. The word was See if you can guess the next word! :)";
     init();
-    document.getElementById("word").textContent = hideWord(WORD);
   }
 });
