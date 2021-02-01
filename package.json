@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/vipermark7/hangman#readme",
   "dependencies": {
+    "colors": "^1.4.0",
     "lodash": "^4.17.20"
   }
 }
